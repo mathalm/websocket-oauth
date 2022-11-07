@@ -67,7 +67,6 @@ export default function ModalSignUp({ handleClose, open }) {
     })
   }
 
-
   const handleVerifyIfShowError = (property, setInputProps, message) => {
     if (property.length > 1) {
       setInputProps({ error: false })

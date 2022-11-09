@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "gapi-client": "^0.0.3",
+    "react-gapi": "^1.0.2"
+  }
+}

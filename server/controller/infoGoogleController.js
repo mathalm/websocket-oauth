@@ -42,3 +42,17 @@ exports.post = async (req, res) => {
     res.send(error).status(400);
   }
 };
+
+
+// create table "logins"(
+//   id varchar primary key not null,
+//   username varchar not null,
+//   password varchar not null,
+//   email varchar not null,
+//   "createdAt" TIMESTAMP not null,
+//   "updatedAt" TIMESTAMP not null
+//   )
+  
+  
+//   drop TABLE logins
+  

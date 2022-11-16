@@ -14,10 +14,11 @@ export const saveInfos = async (body) => {
     body: raw,
     redirect: "follow",
   };
+  console.log(requestOptions);
 
   await fetch("http://localhost:3030/saveInfosLogin", requestOptions)
     .then((response) => response.text())
-    // .then((result) => console.log(result))
+    .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
 };
 
@@ -47,36 +48,22 @@ export const verifyEmailAlreadyExists = async (email) => {
     return false;
   }
 };
-export const getGoogleInfo = async (accessToken, passwordC) => {
-  let body = {}
-  
+export const getGoogleInfo = async (accessToken) => {
+  let body = {};
+
   await fetch(
     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${accessToken}`
   )
     .then((response) => response.json())
-    .then((result) => body = result);
-    if(body){
-      console.log(body);
-      let userName = body.given_name + ' ' + body.family_name;
-      let password = passwordC;
-      let email = body.email;
+    .then((result) => (body = result));
+  if (body) {
+    console.log(body);
+    let userName = body.given_name + " " + body.family_name;
+    let email = body.email;
 
-      saveInfos({
-        userName,
-        password,
-        email,
-      });
+    return {
+      userName,
+      email,
     }
-
-  // `{
-  //     email: "matheuscsalmeida@gmail.com",
-  //     family_name: "Almeida",
-  //     given_name: "Matheus",
-  //     id: "102243342794218842357",
-  //     locale: "pt-BR",
-  //     name: "Matheus Almeida (J2)",
-  //     picture:
-  //       "https://lh3.googleusercontent.com/a/ALm5wu1_-xI7OpE-d4aisGJ-ezp-0ZKA6xjDx3mfAYkHtbE=s96-c",
-  //     verified_email: true,
-  //   }`
+  }
 };

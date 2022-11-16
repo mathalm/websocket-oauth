@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
-const {v4: uuidv4} = require('uuid');
+const { v4: uuidv4 } = require("uuid");
+var bcrypt = require("bcryptjs");
 
 const bancoDeDados = new Sequelize("OAuth", "postgres", "Senhaforte06.", {
   host: "localhost",
@@ -33,22 +34,34 @@ module.exports = class InfosLoginModel {
       },
     });
   }
-  async saveInBase({username, password,email}) {
-    let uuid = uuidv4()
-    
-    const data = await this.login.create({
-      id: uuid,
-      username:username,
-      password:password,
-      email:email
-    })
-    return data;
-    
+  async saveInBase({ username, password, email }) {
+    try {
+      let uuid = uuidv4();
+      console.log(username,password,email);
+      var passwordEncrypted = bcrypt.hashSync(password, 8);
+      bcrypt.compare(password, passwordEncrypted)
+
+
+      // implementando o bcrypt
+
+        .then((res) => {console.log(res)});
+
+      const data = await this.login.create({
+        id: uuid,
+        username: username,
+        password: passwordEncrypted,
+        email: email,
+      });
+      return data;
+
+    } catch (error) {
+      console.log(error);
+    }
   }
-  async getInBase(email){
-    console.log(email, 'aqui');
-    const searchEmail = email.email
-    let data = await this.login.findOne({where: {email: searchEmail}});
+  async getInBase(email) {
+    console.log(email, "aqui");
+    const searchEmail = email.email;
+    let data = await this.login.findOne({ where: { email: searchEmail } });
     return data;
   }
 };

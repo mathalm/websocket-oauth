@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles.css'
-function NavLogin() {
+function Nav() {
   return (
     <nav className='nav-menu'>
       <div>
@@ -23,4 +23,4 @@ function NavLogin() {
   );
 }
 
-export default NavLogin;
+export default Nav;

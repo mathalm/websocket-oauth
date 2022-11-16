@@ -1,10 +1,9 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
   Routes,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
+import InitialPage from "../components/InitialPage";
 import Login from "../components/Login";
 
 function Rotas() {
@@ -12,6 +11,7 @@ function Rotas() {
 
     <Routes >
       <Route path="/" element={<Login />}/>
+      <Route path="/InitialPage" element={<InitialPage/>}/>
 
     </Routes >
   )

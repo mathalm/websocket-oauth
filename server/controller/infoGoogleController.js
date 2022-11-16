@@ -9,7 +9,6 @@ class InfoGoogleController {
   async getData(email) {
     this._getInfos = new InfosLoginModel();
     const data = await this._getInfos.getInBase(email);
-    console.log('aquui');
     return data;
   }
 }

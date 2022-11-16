@@ -7,14 +7,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TextField } from "@mui/material";
 import { useState } from 'react';
-import { getGoogleInfo } from '../../../../../utils/endpoints';
+import { saveInfos } from '../../../../utils/endpoints';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 
-function ModalPasswordOAuthGogle({ handleClose, open, accessToken }) {
+function ModalPasswordOAuth({ handleClose, open, accessToken, userInfos, plataform }) {
   const [inputPropsConfirmPassword, setInputPropsConfirmPassword] = useState({ error: false });
   const [inputPropsPassword, setInputPropsPassword] = useState({ error: false });
   const [password, setPassword] = useState('');
@@ -41,12 +41,27 @@ function ModalPasswordOAuthGogle({ handleClose, open, accessToken }) {
   }
 
   const handleSendInfosOauth = () => {
-    if(inputPropsConfirmPassword.error === false && inputPropsPassword.error === false && password && confirmPassword) {
-      if (accessToken && password) getGoogleInfo(accessToken, password);
+    if (inputPropsConfirmPassword.error === false && inputPropsPassword.error === false && password && confirmPassword) {
+      if (accessToken && password) {
+        console.log({
+          userName: userInfos.userName,
+          email: userInfos.email,
+          password
+        });
+        saveInfos({
+          userName: userInfos.userName,
+          email: userInfos.email,
+          password
+        }
+        )
+        handleClose()
+        window.location = 'http://localhost:3000/InitialPage'
+      }
+
     }
-    else{
+    else {
       let error = { error: true, helperText: 'Incorret password' }
-      setInputPropsPassword(error)
+      handleVerifyPassword()
       setInputPropsConfirmPassword(error)
     }
 
@@ -64,7 +79,7 @@ function ModalPasswordOAuthGogle({ handleClose, open, accessToken }) {
       <DialogContent className='div-modal-sign-up'>
 
         <div>
-          <TextField id="standard-basic5"
+          <TextField id={plataform + '1'}
             label="Password"
             variant="standard"
             type='password'
@@ -76,7 +91,7 @@ function ModalPasswordOAuthGogle({ handleClose, open, accessToken }) {
         </div>
 
         <div>
-          <TextField id="standard-basic6"
+          <TextField id={plataform + '2'}
             label="Confirm password"
             variant="standard"
             type='password'
@@ -89,11 +104,11 @@ function ModalPasswordOAuthGogle({ handleClose, open, accessToken }) {
 
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="error" >Cancel</Button>
+        <Button onClick={handleClose} color="error">Cancel</Button>
         <Button onClick={handleSendInfosOauth} variant="contained">Sign Up</Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default ModalPasswordOAuthGogle;
+export default ModalPasswordOAuth;

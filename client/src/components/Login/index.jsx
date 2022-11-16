@@ -2,7 +2,6 @@ import React from 'react';
 import './styles.css';
 import LeftDiv from './LeftDiv';
 import RightDiv from './RightDiv/inde';
-import NavLogin from './NavLogin';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 function Login() {
@@ -11,9 +10,7 @@ function Login() {
 
   return (
     <GoogleOAuthProvider clientId='14217658420-992vv5aflqaivlc3fqpf21fn684sd88r.apps.googleusercontent.com'>
-
       <main className='page-login'>
-        <NavLogin />
         <div className='page'>
           <div className='detail'>
             <svg width="6671" height="1929" viewBox="0 0 6671 1929" fill="none" xmlns="http://www.w3.org/2000/svg">

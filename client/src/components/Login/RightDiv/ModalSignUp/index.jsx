@@ -9,6 +9,7 @@ import Slide from '@mui/material/Slide';
 import { TextField } from "@mui/material";
 import { useState } from 'react';
 import { saveInfos as saveInfosEndpoint, verifyEmailAlreadyExists } from '../../../../utils/endpoints';
+import { useEffect } from 'react';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -43,28 +44,23 @@ export default function ModalSignUp({ handleClose, open }) {
     }
   }
 
-  const handleShowInfos = () => {
-    handleVerifyUsername();
+  const handleShowInfos = async () => {
+    handleUsernameIsCorrect();
     handleVerifyCorrectEmail();
     handleVerifyPassword();
     handleVerifyConfirmPassword();
-    handleVerifyIfCanSaveInfos()
+    if(await handleCanSaveInfos()){
+      handleSaveInfos();
+    }
   }
 
-  const handleVerifyIfCanSaveInfos = async () => {
-    const emailAlreadyExists = await verifyEmailAlreadyExists(email);
-    if (emailAlreadyExists) {
-      console.log('existe');
-      setInputPropsEmail({ error: true, helperText: 'E-mail already exists' })
-      return
+  const handleCanSaveInfos = async () => {
+    if (inputPropsUserName.error || inputPropsEmail.error || inputPropsConfirmPassword.error || inputPropsPassword.error || userName.length < 2 || password.length < 2){
+      return false
     }
-    if (inputPropsEmail.error | inputPropsConfirmPassword.error | inputPropsPassword.error) return;
-    console.log('aqui jow');
-    saveInfosEndpoint({
-      userName,
-      email,
-      password
-    })
+    else{
+      return true
+    }
   }
 
   const handleVerifyIfShowError = (property, setInputProps, message) => {
@@ -75,23 +71,27 @@ export default function ModalSignUp({ handleClose, open }) {
     }
   }
 
+  const handleUsernameIsCorrect = () => {
+   handleVerifyIfShowError(userName, setInputPropsUserName, "Username can't be empty")
+  }
 
-  const handleVerifyUsername = () => {
-    console.log(userName);
-    handleVerifyIfShowError(userName, setInputPropsUserName, "Username can't be empty")
+  const handleVerifyCorrectEmail = async () => {
+    const emailAlreadyExists = await verifyEmailAlreadyExists(email);
+    if (emailAlreadyExists) {
+      setInputPropsEmail({ error: true, helperText: 'E-mail already exists' })
+      return
+    }
+    if (email.includes('@') && !email.includes(' ')) {
+      setInputPropsEmail({ error: false })
+    } else {
+      setInputPropsEmail({ error: true, helperText: 'Incorret e-mail' })
+      return
+    }
   }
   const handleVerifyPassword = () => {
     handleVerifyIfShowError(password, setInputPropsPassword, "Password can't be empty")
   }
 
-  const handleVerifyCorrectEmail = () => {
-    if (email.includes('@') && !email.includes(' ')) {
-      setInputPropsEmail({ error: false })
-    } else {
-      setInputPropsEmail({ error: true, helperText: 'Incorret e-mail' })
-
-    }
-  }
 
   const handleVerifyConfirmPassword = () => {
     if (confirmPassword === password && confirmPassword.length > 3) {
@@ -100,7 +100,15 @@ export default function ModalSignUp({ handleClose, open }) {
       setInputPropsConfirmPassword({ error: true, helperText: 'Incorret password' })
     }
   }
-
+  const handleSaveInfos = async () =>{
+    saveInfosEndpoint({
+      userName,
+      email,
+      password
+    })
+    
+   window.location = 'http://localhost:3000/InitialPage'
+  }
 
   return (
     <div>
@@ -119,7 +127,7 @@ export default function ModalSignUp({ handleClose, open }) {
               variant="standard"
               fullWidth
               {...inputPropsUserName}
-              onBlur={handleVerifyUsername}
+              onBlur={handleUsernameIsCorrect}
               className='textfield'
               onChange={(e) => handleSetInfos(e, 'userName')} />
           </div>

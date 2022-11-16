@@ -1,8 +1,8 @@
 import React from 'react';
 import './styles.css'
-import facebook from '../../../images/facebook.png';
 import ModalSignUp from './ModalSignUp';
 import OAuthGoogle from './OauthGoogle';
+import OAuthFacebook from './OAuthFacebook';
 
 function RightDiv() {
   const [open, setOpen] = React.useState(false);
@@ -26,10 +26,8 @@ function RightDiv() {
           <div className='div-sign create-account' onClick={handleOpenModalSignUp}>
             <div><span>Sign up!</span></div>
           </div>
-            <OAuthGoogle/>
-          <div className='div-sign'>
-            <div><img src={facebook} alt="img google" /><span> Continue with Google</span></div>
-          </div>
+          <OAuthGoogle />
+          <OAuthFacebook />
         </div>
       </div>
     </>

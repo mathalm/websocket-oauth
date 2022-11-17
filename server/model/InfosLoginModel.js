@@ -59,12 +59,12 @@ export default class InfosLoginModel {
     let searchLogin = await this.login.findOne({
       where: { email: data.email },
     });
+
     if(searchLogin){
       await bcryptjs.compare(data.password, searchLogin.password).then((res) => {
         passwordIsCorrect = res;
       });
     }
-    console.log({passwordIsCorrect,searchLogin});
     return{passwordIsCorrect,searchLogin}
   }
 }

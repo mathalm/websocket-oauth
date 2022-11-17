@@ -1,10 +1,14 @@
-const express = require('express');
-const cors = require('cors')
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 
-const controller = require('../controller/InfoGoogleController');
+import {
+  saveInfosLoginPost,
+  verifyEmailAlreadyExist,
+  verifyDataToLogin,
+} from "../controller/InfosLoginController.js";
 
-router.post('/saveInfosLogin', controller.post)
-router.get('/verifyEmailAlreadyExist/:email', controller.get)
+router.post("/saveInfosLogin", saveInfosLoginPost);
+router.get("/verifyEmailAlreadyExist/:email", verifyEmailAlreadyExist);
+router.post("/verifyDataToLogin", verifyDataToLogin);
 
-module.exports = router
+export default router;

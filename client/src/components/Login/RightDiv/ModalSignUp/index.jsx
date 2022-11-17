@@ -9,7 +9,6 @@ import Slide from '@mui/material/Slide';
 import { TextField } from "@mui/material";
 import { useState } from 'react';
 import { saveInfos as saveInfosEndpoint, verifyEmailAlreadyExists } from '../../../../utils/endpoints';
-import { useEffect } from 'react';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

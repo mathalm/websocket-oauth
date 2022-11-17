@@ -1,50 +1,40 @@
-const Sequelize = require("sequelize");
-const { v4: uuidv4 } = require("uuid");
-var bcrypt = require("bcryptjs");
+import Sequelize, { DataTypes } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+import bcryptjs from "bcryptjs";
 
 const bancoDeDados = new Sequelize("OAuth", "postgres", "Senhaforte06.", {
   host: "localhost",
   dialect: "postgres",
-  // dialectOptions: {
-  //   useUTC: true
-  // },
-  // timezone: '-03:00'
 });
-module.exports = class InfosLoginModel {
+export default class InfosLoginModel {
   constructor() {
     this.login = bancoDeDados.define("logins", {
       id: {
-        type: Sequelize.DataTypes.CHAR,
+        type: DataTypes.CHAR,
         primaryKey: true,
       },
       username: {
-        type: Sequelize.DataTypes.CHAR,
+        type: DataTypes.CHAR,
       },
       password: {
-        type: Sequelize.DataTypes.CHAR,
+        type: DataTypes.CHAR,
       },
       email: {
-        type: Sequelize.DataTypes.CHAR,
+        type: DataTypes.CHAR,
       },
       createdAt: {
-        type: Sequelize.DataTypes.DATE,
+        type: DataTypes.DATE,
       },
       updatedAt: {
-        type: Sequelize.DataTypes.DATE,
+        type: DataTypes.DATE,
       },
     });
   }
   async saveInBase({ username, password, email }) {
     try {
       let uuid = uuidv4();
-      console.log(username,password,email);
-      var passwordEncrypted = bcrypt.hashSync(password, 8);
-      bcrypt.compare(password, passwordEncrypted)
-
-
-      // implementando o bcrypt
-
-        .then((res) => {console.log(res)});
+      console.log(username, password, email);
+      var passwordEncrypted = bcryptjs.hashSync(password, 8);
 
       const data = await this.login.create({
         id: uuid,
@@ -53,7 +43,6 @@ module.exports = class InfosLoginModel {
         email: email,
       });
       return data;
-
     } catch (error) {
       console.log(error);
     }
@@ -64,4 +53,18 @@ module.exports = class InfosLoginModel {
     let data = await this.login.findOne({ where: { email: searchEmail } });
     return data;
   }
-};
+
+  async verifyDataToLogin(data) {
+    let passwordIsCorrect;
+    let searchLogin = await this.login.findOne({
+      where: { email: data.email },
+    });
+    if(searchLogin){
+      await bcryptjs.compare(data.password, searchLogin.password).then((res) => {
+        passwordIsCorrect = res;
+      });
+    }
+    console.log({passwordIsCorrect,searchLogin});
+    return{passwordIsCorrect,searchLogin}
+  }
+}

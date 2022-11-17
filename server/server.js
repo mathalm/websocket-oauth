@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
 const app = express()
-const serverRoutes = require('./routes/serveRoutes');
+import serverRoutes from './routes/serveRoutes.js';
 
 app.use(cors({
   origin: 'http://localhost:3000'
